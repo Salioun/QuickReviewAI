@@ -1,0 +1,7 @@
+.env
+__pycache__/
+*.pyc
+.nuxt/
+node_modules/
+*.sqlite3
+.DS_Store
