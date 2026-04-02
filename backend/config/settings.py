@@ -24,12 +24,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(z=w5@xzh4fw3j)wh0yvn2yk!qw%ltjtl@n$ym+nw2l46uun@q'
+# SECRET_KEY = 'django-insecure-(z=w5@xzh4fw3j)wh0yvn2yk!qw%ltjtl@n$ym+nw2l46uun@q'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'dev-key-change-in-prod')
+
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -85,7 +88,7 @@ DATABASES = {
         'NAME': os.getenv('POSTGRES_DB', 'quickreview'),
         'USER': os.getenv('POSTGRES_USER', 'postgres'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'postgres'),
-        'HOST': os.getenv('POSTGRES_HOST', 'db'), 
+        'HOST': os.getenv('POSTGRES_HOST', 'localhost'), 
         'PORT': '5432',
     }
 }
