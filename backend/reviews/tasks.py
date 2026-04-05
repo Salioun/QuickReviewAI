@@ -29,6 +29,6 @@ def generate_review_task(review_id: int):
     except Reviews.DoesNotExist:
         logger.error(f"f Review {review_id} introuvable")
     except Exception as e:
-        logger.error(f"Erreur lors de la review {review_id} : {e}")
+        logger.error(f"Erreur lors de la review id:{review_id} : {e}")
         review.status = Reviews.Status.FAILED
         review.save()    
