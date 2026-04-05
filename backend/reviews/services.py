@@ -8,7 +8,7 @@ class GithubService:
             'Authorization' : f'Bearer {token}',
             'Accept': 'application/vnd.github.v3+json',
         }
-        self.base_url = 'https//api.github.com'
+        self.base_url = "https://api.github.com"
     
     def parse_url(self, pr_url:str) -> dict:
         regex_pattern = r'github\.com/([^/]+)/([^/]+)/pull/(\d+)'
@@ -24,7 +24,7 @@ class GithubService:
         }
 
     def get_pr_diff(self, pr_url:str) -> dict:
-        pr_info = self.parse_pr_url(pr_url)
+        pr_info = self.parse_url(pr_url)
         owner  = pr_info['owner']
         repo   = pr_info['repo']
         number = pr_info['number']
