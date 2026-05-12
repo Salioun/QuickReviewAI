@@ -3,6 +3,8 @@ from unittest.mock import patch, MagicMock
 from .services import GithubService
 from .models import Reviews
 
+#python3 manage.py test reviews
+
 class GitHubServiceParseTest(TestCase):
     def setUp(self):
         self.service = GithubService(token='fake-token')
