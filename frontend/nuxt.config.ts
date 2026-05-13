@@ -5,9 +5,13 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: process.env.API_BASE || 'http://localhost/api'
-    }
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost/api'
+    },
   },
 
-  devtools: { enabled: true }
+  devtools: { enabled: true },
+  ssr: false,
+  experimental: {
+    viteEnvironmentApi: true,
+  },
 })
