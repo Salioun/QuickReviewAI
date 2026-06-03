@@ -141,3 +141,6 @@ CELERY_TASK_SERIALIZER = 'json'
 
 # GitHub
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN', '')
+
+# Anthropic
+ANTHROPIC_API_KEY = os.getenv('ANTHROPIC_API_KEY', '')
