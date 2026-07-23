@@ -24,6 +24,7 @@ class ReviewsSerializer(serializers.ModelSerializer):
             'pr_number',
             'status',
             'result_text',
+            'result_json',
             'score',
             'created_at',
         ]
