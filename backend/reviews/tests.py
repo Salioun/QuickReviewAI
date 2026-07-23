@@ -1,8 +1,8 @@
 from django.test import TestCase
 from unittest.mock import patch, MagicMock
-from .services import GithubService
+from .services import GithubService, LLMService
 from .models import Reviews
-
+import json
 #python3 manage.py test reviews
 
 class GitHubServiceParseTest(TestCase):
@@ -43,3 +43,78 @@ class ReviewModelTest(TestCase):
             pr_number=1,
         )
         self.assertIn('owner/repo', str(review))
+
+class LLMServiceTest(TestCase):
+    def setUp(self):
+        self.service = LLMService(api_key='fake-api-key')
+    
+    def _make_mock_response(self, json_str: str):
+        mock_response = MagicMock()
+        mock_content = MagicMock()
+        mock_content.text = json_str
+        mock_response.content = [mock_content]
+        return mock_response    
+
+    @patch('reviews.services.anthropic.Anthropic')
+    def test_generate_review_valid_json(self, mock_anthropic):
+        fake_json = json.dumps({
+            "score": 7,
+            "summary": "Bon PR dans l'ensemble.",
+            "bugs": [],
+            "suggestions": [],
+            "performance": [],
+            "positive_points": ["Code clair"]
+        })
+
+        mock_client = MagicMock()
+        mock_client.messages.create.return_value = self._make_mock_response(fake_json)
+        mock_anthropic.return_value = mock_client
+
+
+        pr_data = {
+            'repo_name': 'owner/repo',
+            'number': 1,
+            'title': 'Test PR',
+            'description': '',
+            'files_count': 2,
+            'diff': 'diff --git a/file.py\n+print("hello")',
+        }
+        service = LLMService(api_key='fake-api-key')
+        result = service.generate_review(pr_data)
+
+        self.assertEqual(result['score'], 7)
+        self.assertEqual(result['summary'], "Bon PR dans l'ensemble.")
+        self.assertIsInstance(result['bugs'], list)
+    
+    @patch('reviews.services.anthropic.Anthropic')
+    def test_generate_review_json_invalide(self, mock_anthropic_class):
+        """Si le LLM retourne du texte invalide → ValueError."""
+        mock_client = MagicMock()
+        mock_client.messages.create.return_value = self._make_mock_response(
+            "Désolé, je ne peux pas analyser ce diff."
+        )
+        mock_anthropic_class.return_value = mock_client
+
+        pr_data = {
+            'repo_name': 'owner/repo', 'number': 1,
+            'title': 'Test', 'description': '', 'files_count': 1,
+            'diff': 'diff',
+        }
+
+        service = LLMService(api_key='fake-api-key')
+
+        with self.assertRaises(ValueError):
+            service.generate_review(pr_data)
+
+    def test_truncate_diff_court(self):
+        """Un diff court n'est pas tronqué."""
+        diff = "a" * 1000
+        result = self.service._truncate_diff(diff)
+        self.assertEqual(result, diff)
+
+    def test_truncate_diff_long(self):
+        """Un diff trop long est tronqué avec un message."""
+        diff = "a" * 20_000
+        result = self.service._truncate_diff(diff)
+        self.assertIn("tronqué", result)
+        self.assertLess(len(result), 20_000)

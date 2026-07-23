@@ -25,7 +25,7 @@ class ReviewPostView(APIView):
             pr_number = 0
         )
 
-        generate_review_task(review.id)
+        generate_review_task.delay(review.id)
 
         return Response(
             {'id': review.id, 'status': review.status},

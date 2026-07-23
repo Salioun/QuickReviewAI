@@ -17,6 +17,7 @@ class Reviews(models.Model):
         default=Status.PENDING
     )
     result_text = models.TextField(blank=True, default='')
+    result_json = models.JSONField(null=True, blank=True)
     score = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
