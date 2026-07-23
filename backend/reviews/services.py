@@ -47,15 +47,15 @@ class GithubService:
             diff_text = diff_response.text
 
             return {
-            'owner':       owner,
-            'repo':        repo,
-            'number':      number,
-            'repo_name':   f"{owner}/{repo}",
-            'title':       pr_data.get('title', ''),
-            'description': pr_data.get('body', ''),
-            'diff':        diff_text,
-            'files_count': pr_data.get('changed_files', 0),
-        }
+                'owner':       owner,
+                'repo':        repo,
+                'number':      number,
+                'repo_name':   f"{owner}/{repo}",
+                'title':       pr_data.get('title', ''),
+                'description': pr_data.get('body', ''),
+                'diff':        diff_text,
+                'files_count': pr_data.get('changed_files', 0),
+            }
 
 class LLMService:
     MAX_TOKENS = 15000
