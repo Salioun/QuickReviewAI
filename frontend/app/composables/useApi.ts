@@ -3,7 +3,7 @@ export const useApi = () => {
     const baseUrl = config.public.apiBase
 
     const submitReview = async (prUrl:string) => {
-        const response = await fetch(`${baseUrl}/reviews/`, {
+        const response = await fetch(`${baseUrl}/reviews/create`, {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify({ pr_url : prUrl})
@@ -27,5 +27,16 @@ export const useApi = () => {
         return response.json()
     }
 
-    return {submitReview, getReview}
+    const getReviews = async () => {
+        const response = await fetch(`${baseUrl}/reviews/`)
+
+        if (!response.ok) {
+            throw new Error('Erreur de chargement')
+        }
+        
+        return response.json()
+    }
+
+    return {submitReview, getReview, getReviews}
+
 }

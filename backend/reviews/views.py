@@ -1,3 +1,5 @@
+from celery.utils import objects
+from django.db.models.indexes import OrderBy
 from django.shortcuts import render
 
 # Create your views here.
@@ -43,3 +45,10 @@ class ReviewGetView(APIView):
             )
         serializer = ReviewsSerializer(review)
         return Response(serializer.data)
+
+class ReviewListView(APIView): 
+    def get(self, request):
+        reviews = Reviews.objects.all().order_by('-created_at')[:20]
+        serializer = ReviewsSerializer(reviews, many=True)
+        return Response(serializer.data)
+
