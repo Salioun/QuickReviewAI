@@ -1,9 +1,7 @@
-from django.shortcuts import render
 
-# Create your views here.
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import serializers, status
+from rest_framework import status
 from .models import Reviews
 from .serializers import ReviewsPostSerializer, ReviewsSerializer
 from .tasks import generate_review_task
@@ -43,3 +41,10 @@ class ReviewGetView(APIView):
             )
         serializer = ReviewsSerializer(review)
         return Response(serializer.data)
+
+class ReviewListView(APIView): 
+    def get(self, request):
+        reviews = Reviews.objects.all().order_by('-created_at')[:20]
+        serializer = ReviewsSerializer(reviews, many=True)
+        return Response(serializer.data)
+

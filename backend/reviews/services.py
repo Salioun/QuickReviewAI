@@ -128,7 +128,7 @@ class LLMService:
     def generate_review(self, pr_data: dict) -> dict:
         prompt = self._build_prompt(pr_data)
         response = self.client.messages.create(
-            model="claude-opus-4-5",
+            model="claude-haiku-4-5", # On utilise le modèle Claude Haiku 4.5 pour la gestion des couts
             messages=[{"role": "user", "content": prompt}],
             max_tokens=2048,
         )
