@@ -21,7 +21,7 @@
                 <NuxtLink
                     v-for="review in reviews"
                     :key ="review.id"
-                    :to="`reviews/${review.id}`"
+                    :to="`reviews/${review.id}/`"
                     class="block bg-gray-900 border border-gray-800 hover:border-gray-600 rounded-xl p-5 transition-colors"
                 >
                     <div class="flex items-center justify-between">

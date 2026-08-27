@@ -124,7 +124,6 @@ const startPolling = async (id) => {
 
     try {
       const review = await getReview(id)
-      console.log(review.status)
 
       if (review.status === 'completed') {
         clearInterval(pollInterval)

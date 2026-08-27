@@ -1,11 +1,7 @@
-from celery.utils import objects
-from django.db.models.indexes import OrderBy
-from django.shortcuts import render
 
-# Create your views here.
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import serializers, status
+from rest_framework import status
 from .models import Reviews
 from .serializers import ReviewsPostSerializer, ReviewsSerializer
 from .tasks import generate_review_task
